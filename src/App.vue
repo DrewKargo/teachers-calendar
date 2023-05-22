@@ -1,26 +1,24 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+	<div class="h-screen dark:bg-slate-900 font-montserrat">	
+		<H1 class="text-3xl font-bold underline bg-slate-800">Мой календарь</H1>
+		<workday-block/>
+		Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
+	</div>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import WorkdayBlock from './components/WorkdayBlock/WorkdayBlock.vue'
 
-export default {
+
+export default{
   name: 'App',
-  components: {
-    HelloWorld
+  components:{
+	WorkdayBlock
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+	@import url(./assets/css/style.css);
 </style>
