@@ -2,13 +2,14 @@
 	<div class="w-80 h-[450px] relative mx-auto">
 		<div class="h-full flex flex-col bg-green-100 opacity-75 rounded-3xl border-2 border-green-600/20 
 			shadow-2xl overflow-hidden">
-			<h2 class="text-center p-2 border-b-2 border-green-600 font-semibold text-lg">{{this.obg.title}}</h2>
+			<h2 class="text-center p-2 border-b-2 border-green-600 font-semibold text-lg">{{DAY.title}}</h2>
 			<div class="h-96 shrink overflow-hidden hover:overflow-auto">
-				<ul class="flex flex-col divide-y divide-green-500/30">
+				<ul class="flex flex-col divide-y divide-green-500/30 pt-2">
 					<workday-item
-					v-for="item in obg.timetable" 
+					v-for="item in DAY.timetable" 
 					:key="item.time"
 					:item_data="item"
+					@removeItem="removeTimetableItem"
 					/>
 				</ul>
 			</div>
@@ -74,69 +75,25 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import WorkdayItem from './WorkdayItem.vue';
 export default {
 	name: 'WorkdayBlock',
 	components:{
 		WorkdayItem,
 	},
+	emits:{
+		removeItem:{
+			type: Object,
+			required: true
+		}
+	},
 	data(){
 		return{
 			showTimePanel: false,
 			hour: 10,
-			minutes: 30,
-			obg: {
-				title: 'Сегодня',
-				defaultTime: [
+			minutes: 30
 
-					],
-				timetable: [
-					{
-						time: '09:00',
-						person: null
-					},
-					{
-						time: '10:00',
-						person: null
-					},
-					{
-						time: '11:00',
-						person: null
-					},
-					{
-						time: '12:00',
-						person: null
-					},
-					{
-						time: '13:00',
-						person: null
-					},
-					{
-						time: '14:00',
-						person: null
-					},
-					{
-						time: '15:00',
-						person: null
-					},
-					{
-						time: '16:00',
-						person: null
-					},
-					{
-						time: '17:00',
-						person: null
-					},
-					{
-						time: '18:00',
-						person: null
-					},
-					{
-						time: '19:00',
-						person: null
-					}
-				]
-			}
 		}
 	},
 	methods:{
@@ -150,10 +107,10 @@ export default {
 				}
 			}
 			const newItem = new Item
-			if(this.obg.timetable.find((el) => el.time === newItem.time)){
+			if(this.DAY.timetable.find((el) => el.time === newItem.time)){
 				console.log('oops, time is busy')
 			}else{
-				this.obg.timetable.push(newItem);
+				this.DAY.timetable.push(newItem);
 				this.showTimePanel = false;
 			}
 
@@ -161,9 +118,16 @@ export default {
 		sortItemsByTime(){
 			//this.timetable.sort();
 		},
-		removeTimetableItem(i){
-			this.obg.timetable.splice(i, 1);
+		removeTimetableItem(item){
+			let current = this.DAY.timetable.indexOf(item);
+			this.DAY.timetable.splice(current, 1);
 		}
+	},
+	computed:{
+		...mapGetters([
+			'DAY',
+			'PERSONS'
+		])
 	}
 }
 </script>
@@ -186,9 +150,7 @@ export default {
 	}
 	
 	.openPanel-enter-from, .addTime-enter-from, .openPanel-leave-to,.addTime-leave-to{
-		transition: all .3s cubic-bezier(0.075, 0.82, 0.165, 1);
-		transform: opacity .5s ease;
-		//opacity: 0;
+		animation: iconAnimation-out .3s reverse;
 	}
 	.openPanel-leave-active, .addTime-leave-active{
 		animation: iconAnimation-out .3s;
